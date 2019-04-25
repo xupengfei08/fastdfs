@@ -1,0 +1,65 @@
+version: '2'
+services:
+  fdfs-tracker:
+    image: suanmilk/fastdfs
+    container_name: fdfs-tracker
+    network_mode: host
+    restart: always
+    privileged: true
+    volumes:
+      - "./tracker:/fastdfs/tracker"
+    command: ["tracker"]
+  fdfs-storage:
+    image: suanmilk/fastdfs
+    container_name: fdfs-storage
+    network_mode: host
+    restart: always
+    privileged: true
+    environment:
+      - GROUP_NAME=group1
+      - TRACKER_SERVER=192.168.0.121:22122
+      - GROUP_NAMES=group1
+      - WEB_PORT=80
+    volumes:
+      - "./storage:/fastdfs/storage"
+      - "./storage_data:/fastdfs/storage_data"
+    command: ["storage"]
+
+#version: '2'
+#services:
+#  fdfs-tracker:
+#    image: suanmilk/fastdfs
+#    container_name: fdfs-tracker
+#    network_mode: host
+#    restart: always
+#    privileged: true
+#    volumes:
+#      - ./tracker:/fastdfs/tracker
+#    command: ["tracker"]
+#  fdfs-storage:
+#    image: suanmilk/fastdfs
+#    container_name: fdfs-storage
+#    network_mode: host
+#    restart: always
+#    privileged: true
+#    environment:
+#      - GROUP_NAME=group2
+#      - TRACKER_SERVER=192.168.0.5:22122,192.168.0.6:22122
+#      - GROUP_NAMES=group1,group2
+#      - WEB_PORT=80
+#    volumes:
+#      - ./storage:/fastdfs/storage
+#      - ./storage_data:/fastdfs/storage_data
+#      - ./storage/nginx/logs:/usr/local/nginx/logs
+#    command: ["storage"]
+#  fdfs-nginx:
+#    image: suanmilk/fastdfs
+#    container_name: fdfs-nginx
+#    network_mode: host
+#    restart: always
+#    privileged: true
+#    volumes:
+#      - ./nginx.conf:/usr/local/nginx/conf/nginx.conf
+#      - ./nginx/logs:/usr/local/nginx/logs
+#      - ./nginx:/fastdfs/nginx
+#    command: ["nginx"]

@@ -1,0 +1,5 @@
+### IntelliJ IDEA ###
+.idea
+
+### docker启动持久化数据 ###
+fdfs-data/

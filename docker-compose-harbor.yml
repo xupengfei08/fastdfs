@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+  fdfs-tracker:
+    image: suanmilk/fastdfs
+    container_name: fdfs-tracker
+    ports:
+      - "22122:22122"
+    restart: always
+    privileged: true
+    volumes:
+      - "./tracker:/fastdfs/tracker"
+    command: [tracker]
+    networks:
+      fdfs:
+        ipv4_address: 172.16.0.100
+  fdfs-storage:
+    image: suanmilk/fastdfs
+    container_name: fdfs-storage
+    ports:
+      - "23000:23000"
+    restart: always
+    privileged: true
+    environment:
+      - TRACKER_SERVER=fdfs-tracker:22122
+    volumes:
+      - "./storage:/fastdfs/storage"
+      - "./storage_data:/fastdfs/storage_data"
+    networks:
+      fdfs:
+        ipv4_address: 172.16.0.101
+    links:
+      - fdfs-tracker
+    depends_on:
+      - fdfs-tracker
+    command: [storage]
+
+networks:
+  fdfs:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.16.0.0/16
+        gateway: 172.16.0.1
