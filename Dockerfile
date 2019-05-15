@@ -8,6 +8,8 @@ COPY ./conf/* /fdfs_conf/
 
 COPY ./entrypoint.sh /
 
+VOLUME ["/fastdfs"]
+
 WORKDIR /usr/local/src
 
 RUN chmod +x init.sh && ./init.sh

@@ -114,30 +114,13 @@ if [ "$1" = 'storage' ]; then
             sed -i "s|^tracker_server=.*$|tracker_server=${TRACKER_SERVER//,/\ntracker_server=}|g" ${MOD_BASE_CONF_FILE}
         fi
 
-        # 整个集群所拥有的组(卷)
-        if [ ${GROUP_NAMES} ]; then
-            array=(${GROUP_NAMES//,/ })
-            sed -i "s|^group_count=.*$|group_count=${#array[@]}|g" ${MOD_BASE_CONF_FILE}
-            # 设置组(卷)的信息
-            for var in ${array[@]}
-            do
-                echo -e "\n\
-[${var}]\n\
-group_name=${var}\n\
-storage_server_port=23000\n\
-store_path_count=1\n\
-store_path0=/fastdfs/storage_data\n\
-                " >> ${MOD_BASE_CONF_FILE}
-            done
-        else
-            echo -e "\n\
+        echo -e "\n\
 [${GROUP_NAME:-group1}]\n\
 group_name=${GROUP_NAME:-group1}\n\
 storage_server_port=23000\n\
 store_path_count=1\n\
 store_path0=/fastdfs/storage_data\n\
-            " >> ${MOD_BASE_CONF_FILE}
-        fi
+        " >> ${MOD_BASE_CONF_FILE}
 
         # 完成配置文件
         mv ${MOD_BASE_CONF_FILE} ${MOD_CONF_FILE}
